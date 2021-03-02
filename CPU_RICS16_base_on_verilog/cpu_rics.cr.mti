@@ -1,0 +1,133 @@
+{C:/Users/TR/Desktop/computer construct/RICS/rom.v} {1 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/rom.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module rom
+
+Top level modules:
+	rom
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/addr_decode.v} {1 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/addr_decode.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module addr_decode
+
+Top level modules:
+	addr_decode
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/adr.v} {1 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/adr.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module adr
+
+Top level modules:
+	adr
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/ram.v} {1 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/ram.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module ram
+
+Top level modules:
+	ram
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/cpu.v} {2 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/cpu.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module register
+-- Compiling module accum
+-- Compiling module alu
+-- Compiling module datactl
+-- Compiling module adr
+-- Compiling module counter
+-- Compiling module machinectl
+-- Compiling module machine
+** Warning: ** while parsing file included at C:/Users/TR/Desktop/computer construct/RICS/cpu.v(9)
+** at machine.v(98): (vlog-2600) [RDGN] - Redundant digits in numeric literal.
+** Warning: ** while parsing file included at C:/Users/TR/Desktop/computer construct/RICS/cpu.v(9)
+** at machine.v(144): (vlog-2600) [RDGN] - Redundant digits in numeric literal.
+-- Compiling module clk_gen
+-- Compiling module cpu
+
+Top level modules:
+	cpu
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/machinectl.v} {1 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/machinectl.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module machinectl
+
+Top level modules:
+	machinectl
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/accum.v} {1 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/accum.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module accum
+
+Top level modules:
+	accum
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/datactl.v} {1 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/datactl.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module datactl
+
+Top level modules:
+	datactl
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/machine.v} {2 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/machine.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module machine
+** Warning: C:/Users/TR/Desktop/computer construct/RICS/machine.v(98): (vlog-2600) [RDGN] - Redundant digits in numeric literal.
+** Warning: C:/Users/TR/Desktop/computer construct/RICS/machine.v(144): (vlog-2600) [RDGN] - Redundant digits in numeric literal.
+
+Top level modules:
+	machine
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/instruction_reg.v} {1 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/instruction_reg.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module register
+
+Top level modules:
+	register
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/counter.v} {1 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/counter.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module counter
+
+Top level modules:
+	counter
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/alu.v} {1 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/alu.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module alu
+
+Top level modules:
+	alu
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/cputop.v} {2 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/cputop.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module ram
+-- Compiling module rom
+-- Compiling module addr_decode
+-- Compiling module register
+-- Compiling module accum
+-- Compiling module alu
+-- Compiling module datactl
+-- Compiling module adr
+-- Compiling module counter
+-- Compiling module machinectl
+-- Compiling module machine
+** Warning: ** while parsing file included at C:/Users/TR/Desktop/computer construct/RICS/cputop.v(5)
+** while parsing file included at cpu.v(9)
+** at machine.v(98): (vlog-2600) [RDGN] - Redundant digits in numeric literal.
+** Warning: ** while parsing file included at C:/Users/TR/Desktop/computer construct/RICS/cputop.v(5)
+** while parsing file included at cpu.v(9)
+** at machine.v(144): (vlog-2600) [RDGN] - Redundant digits in numeric literal.
+-- Compiling module clk_gen
+-- Compiling module cpu
+-- Compiling module cputop
+
+Top level modules:
+	cputop
+
+} {} {}} {C:/Users/TR/Desktop/computer construct/RICS/clocker.v} {1 {vlog -work work -stats=none {C:/Users/TR/Desktop/computer construct/RICS/clocker.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 2019.2 Compiler 2019.04 Apr 17 2019
+-- Compiling module clk_gen
+
+Top level modules:
+	clk_gen
+
+} {} {}}
