@@ -1,0 +1,101 @@
+`include "gen_defines.v"
+
+module ex_csr(
+  //内核模式
+  output u_mode,
+  output s_mode,
+  output h_mode,
+  output m_mode,
+  
+  output csr_access_ilgl,//存取异常信号
+ );
+
+
+
+//表示内核所处模式，由于面向嵌入式，为了简化，因此仅仅支持m_mode(机器模式)
+wire [1:0] priv_mode = u_mode ? 2'b00 : 
+                       s_mode ? 2'b01 :
+                       h_mode ? 2'b10 : 
+                       m_mode ? 2'b11 : 
+                                2'b11 ;
+assign u_mode = 1'b0;
+assign s_mode = 1'b0;
+assign h_mode = 1'b0;
+assign m_mode = 1'b1;
+
+
+
+
+//访存控制信号
+assign csr_access_ilgl = 1'b0;//对于csr访问不会产生异常
+wire wbck_csr_wen = csr_wr_en & csr_ena & (~csr_access_ilgl);//写
+wire read_csr_ena = csr_rd_en & csr_ena & (~csr_access_ilgl);//读，该信号如果不需要扩展csr则不需要
+       //门控信号，仅在需要读写时触发，以减少功耗
+
+
+
+
+//csr寄存器
+////0x300 MRW
+     //控制信号
+wire sel_mstatus = (csr_idx == 12'h300);//该寄存器的选择信号
+wire rd_mstatus = sel_mstatus & csr_rd_en;//表示读该寄存器
+wire wr_mstatus = sel_mstatus & csr_wr_en;//表示写该寄存器
+wire [`E203_XLEN-1:0] csr_mstatus = status_r;//输出端口
+	  //寄存器主体部分
+wire [`E203_XLEN-1:0] status_r;
+assign status_r[31]    = status_sd_r;//SD
+assign status_r[30:23] = 8'b0;//保留 
+assign status_r[22:17] = 6'b0;// TSR--MPRV
+assign status_r[16:15] = status_xs_r;// XS
+assign status_r[14:13] = status_fs_r;// FS
+assign status_r[12:11] = 2'b11;// MPP 
+assign status_r[10:9]  = 2'b0;//保留  
+assign status_r[8]     = 1'b0;// SPP
+assign status_r[7]     = status_mpie_r;// MPIE
+assign status_r[6]     = 1'b0;//保留  
+assign status_r[5]     = 1'b0;// SPIE 
+assign status_r[4]     = 1'b0;// UPIE 
+assign status_r[3]     = status_mie_r;// MIE
+assign status_r[2]     = 1'b0;//保留  
+assign status_r[1]     = 1'b0;// SIE 
+assign status_r[0]     = 1'b0;// UIE 
+	  //寄存器中的各个信号
+	    //MPIE
+		 wire status_mpie_r;
+		 wire status_mpie_ena  = 
+        (wr_mstatus & wbck_csr_wen) |
+        cmt_mret_ena |
+        cmt_status_ena;
+		 wire status_mpie_nxt    = 
+		  cmt_status_ena ? status_mie_r :
+		  cmt_mret_ena  ? 1'b1 : 
+		  (wr_mstatus & wbck_csr_wen) ? wbck_csr_dat[7] : 
+		  status_mpie_r ; 
+       sirv_gnrl_dfflr #(1) status_mpie_dfflr (status_mpie_ena, status_mpie_nxt, status_mpie_r, clk, rst_n);
+		 //MIE
+		 wire status_mie_ena  = status_mpie_ena; 
+		 wire status_mie_nxt  = cmt_status_ena ? 1'b0 :
+										cmt_mret_ena ? status_mpie_r :
+										(wr_mstatus & wbck_csr_wen) ? wbck_csr_dat[3] : 
+										 status_mie_r;											//status_mie_r直接输出
+		 sirv_gnrl_dfflr #(1) status_mie_dfflr (status_mie_ena, status_mie_nxt, status_mie_r, clk, rst_n);
+		 //SD 仅可读
+		 wire status_sd_r = (status_fs_r == 2'b11) | (status_xs_r == 2'b11);
+		 //XS 仅可读 不存在EAI协处理器 因此XS为00
+		 wire [1:0] status_xs_r;
+		 assign status_xs_r = 2'b0;
+		 assign eai_xs_off = 1'b0; 
+		 //FS 仅可读 不存在浮点运算单元 因此FS为00
+		 wire [1:0] status_fs_r;
+		 assign status_fs_r = 2'b0; 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 

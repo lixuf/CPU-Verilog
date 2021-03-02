@@ -1,0 +1,23 @@
+`include "gen_defines.v"
+
+module if_bpu(//还未处理冲突//使用静态预测，每次均向后跳转
+input [`PC_Size-1:0] in_PC,
+input clk,
+input rst_n,
+
+//来自minidec
+input dec_jal,
+input dec_jalr,
+input dec_bxx,
+input [`XLEN-1:0] dec_jp_imm,
+
+//输出到加法器
+output [PC_Size-1:0] op1,
+output [PC_Size-1:0] op2,
+
+//输出控制信号
+output bpu_wait,//冲突需等待一个时钟周期，可能发生在jalr
+output pred_taken//预测为是否需要跳转
+)
+
+//Bxx

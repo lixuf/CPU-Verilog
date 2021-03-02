@@ -1,0 +1,84 @@
+`include "gen_defines.v"
+module ex_alu_dpath(
+);
+
+//操作数
+	//来自alu的各种运算控制器
+	wire [`E203_XLEN-1:0] mux_op1;
+	wire [`E203_XLEN-1:0] mux_op2;
+	//除了移位运算以外的操作数
+	wire [`E203_XLEN-1:0] misc_op1 = mux_op1[`E203_XLEN-1:0];
+	wire [`E203_XLEN-1:0] misc_op2 = mux_op2[`E203_XLEN-1:0];
+	//移位运算操作数
+	wire [`E203_XLEN-1:0] shifter_op1 = alu_req_alu_op1[`E203_XLEN-1:0];
+	wire [`E203_XLEN-1:0] shifter_op2 = alu_req_alu_op2[`E203_XLEN-1:0];
+	
+//控制信号  
+wire op_max;//最大值  
+wire op_min ;//最小值 
+wire op_maxu;//无符号—最大值
+wire op_minu;//无符号-最小值
+wire op_add;//加
+wire op_sub;//减
+wire op_addsub = op_add | op_sub;//是否加减-开启加减法运算模块 
+wire op_or;//或
+wire op_xor;//异或
+wire op_and;//与
+wire op_sll;//逻辑左移
+wire op_srl;//逻辑右移
+wire op_sra;//算术右移
+wire op_slt;//有符号比较置位
+wire op_sltu;//无符号比较置位
+wire op_mvop2;//lui指令
+wire op_cmp_eq ;//比较-相等
+wire op_cmp_ne ;//比较-不等
+wire op_cmp_lt ;//比较-小于
+wire op_cmp_gt ;//比较-大于
+wire op_cmp_ltu;//无符号-小于
+wire op_cmp_gtu;//无符号-大于
+wire cmp_res;//比较结果
+
+//共享数据缓冲器,两个寄存器
+wire sbf_0_ena;
+wire [33-1:0] sbf_0_nxt;
+wire [33-1:0] sbf_0_r;
+wire sbf_1_ena;
+wire [33-1:0] sbf_1_nxt;
+wire [33-1:0] sbf_1_r;
+
+//移位运算
+wire [`E203_XLEN-1:0] shifter_in1;//待移位的数据
+wire [5-1:0] shifter_in2;//表明移几位
+wire [`E203_XLEN-1:0] shifter_res;//结果
+wire op_shift = op_sra | op_sll | op_srl;//表明该运算为移位运算	
+assign shifter_in1 = {`E203_XLEN{op_shift}} &//把右移转化为左移
+           (
+               (op_sra | op_srl) ? //当为右移操作时候，将操作数1逆置
+                 {
+    shifter_op1[00],shifter_op1[01],shifter_op1[02],shifter_op1[03],
+    shifter_op1[04],shifter_op1[05],shifter_op1[06],shifter_op1[07],
+    shifter_op1[08],shifter_op1[09],shifter_op1[10],shifter_op1[11],
+    shifter_op1[12],shifter_op1[13],shifter_op1[14],shifter_op1[15],
+    shifter_op1[16],shifter_op1[17],shifter_op1[18],shifter_op1[19],
+    shifter_op1[20],shifter_op1[21],shifter_op1[22],shifter_op1[23],
+    shifter_op1[24],shifter_op1[25],shifter_op1[26],shifter_op1[27],
+    shifter_op1[28],shifter_op1[29],shifter_op1[30],shifter_op1[31]
+						} : shifter_op1//若为左移则不变
+           );
+assign shifter_in2 = {5{op_shift}} & shifter_op2[4:0];//当op_shift==1时in2才有值，为移动的位数
+assign shifter_res = (shifter_in1 << shifter_in2);//结果
+wire [`E203_XLEN-1:0] sll_res = shifter_res;//逻辑左移结果
+wire [`E203_XLEN-1:0] srl_res =  
+                 {
+    shifter_res[00],shifter_res[01],shifter_res[02],shifter_res[03],
+    shifter_res[04],shifter_res[05],shifter_res[06],shifter_res[07],
+    shifter_res[08],shifter_res[09],shifter_res[10],shifter_res[11],
+    shifter_res[12],shifter_res[13],shifter_res[14],shifter_res[15],
+    shifter_res[16],shifter_res[17],shifter_res[18],shifter_res[19],
+    shifter_res[20],shifter_res[21],shifter_res[22],shifter_res[23],
+    shifter_res[24],shifter_res[25],shifter_res[26],shifter_res[27],
+    shifter_res[28],shifter_res[29],shifter_res[30],shifter_res[31]
+                 };//逻辑右移结果-只需将结果逆置
+wire [`E203_XLEN-1:0] eff_mask = (~(`E203_XLEN'b0)) >> shifter_in2;//算术右移的mask，将移动的位置全置为0，在补上符号位
+wire [`E203_XLEN-1:0] sra_res = //移动的位置全置为0    //补上符号位
+										(srl_res & eff_mask) | ({32{shifter_op1[31]}} & (~eff_mask));//算术右移结果

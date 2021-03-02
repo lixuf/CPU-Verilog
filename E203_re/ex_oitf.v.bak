@@ -1,0 +1,34 @@
+
+
+`include "gen_defines.v"
+module ex_oitf(
+//来自派遣单元
+  input  dis_ena,//派遣一个长指令
+  input  disp_i_rs1en,//表明当前指令是否需要操作数1
+  input  disp_i_rs2en,//表明当前指令是否需要操作数2
+  input  disp_i_rs3en,//表明当前指令是否需要操作数3
+  input  disp_i_rdwen,//表明当前指令是否需要写回操作数
+  input  [`E203_RFIDX_WIDTH-1:0] disp_i_rs1idx,//当前指令操作数1
+  input  [`E203_RFIDX_WIDTH-1:0] disp_i_rs2idx,//当前指令操作数2
+  input  [`E203_RFIDX_WIDTH-1:0] disp_i_rs3idx,//当前指令操作数3
+  input  [`E203_RFIDX_WIDTH-1:0] disp_i_rdidx,//当前指令写操作数
+  input  [`E203_PC_SIZE    -1:0] disp_i_pc,//当前指令pc
+//送至派遣单元
+  output oitfrd_match_disprs1,//派遣指令操作数1与当前任一表现相同
+  output oitfrd_match_disprs2,//派遣指令操作数2与当前任一表现相同
+  output oitfrd_match_disprs3,//派遣指令操作数3与当前任一表现相同
+  output oitfrd_match_disprd,//派遣指令写操作数与当前任一表现相同
+  output oitf_empty,//oitf为空
+  output dis_ready,
+  output [`E203_ITAG_WIDTH-1:0] dis_ptr,
+//来自写回单元
+  input  ret_ena,//表明写回一个长指令，移除一个oitf表项
+//输出至写回单元
+  output [`E203_ITAG_WIDTH-1:0] ret_ptr,	
+  output [`E203_RFIDX_WIDTH-1:0] ret_rdidx,//写回操作数索引
+  output ret_rdwen,//结果写回使能
+  output [`E203_PC_SIZE-1:0] ret_pc,//该指令的pc
+  
+input  clk,
+input  rst_n
+);

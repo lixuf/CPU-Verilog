@@ -1,0 +1,27 @@
+`include "gen_defines.v"
+
+module if_pc_fetch(
+	
+);
+
+//与其他块的连线
+////mini_decoder
+if_minidec u_if_minidec (
+	//由pc_fetch输出至minidec
+	.in_IR 		(if_ir_next		),
+	//由minidex输入至pc_fetch
+	////跳转相关
+	.dec_if32	(minidec_if32	),
+	.dec_bjp		(minidec_bjp	),
+	.dec_jal		(minidec_jal	),
+	.dec_jalr	(minidec_jalr	),
+	.dec_bxx    (minidec_bxx   ),
+	.dec_jalr_rs1_indx	(minidec_jalr_rs1_indx),
+	.dec_bjp_imm			(minidec_bjp_imm		 )
+
+);
+
+//pc顺序自增
+wire [2:0] pc_incr_offset = minidec_if32 ? 3'd4 : 3'd2;//判断是32位还是16位
+
+//跳转

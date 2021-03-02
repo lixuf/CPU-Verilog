@@ -1,0 +1,7 @@
+·include "gen_defines.v"
+
+module ex_regfile(
+  input  [`E203_RFIDX_WIDTH-1:0] read_src1_idx,//寄存器索引1_读
+  input  [`E203_RFIDX_WIDTH-1:0] read_src2_idx,//寄存器索引2_读
+  output [`E203_XLEN-1:0] read_src1_dat,//寄存器索引1读出的数据
+  output [`E203_XLEN-1:0] read_src2_dat,//寄存器索引2读出的数据

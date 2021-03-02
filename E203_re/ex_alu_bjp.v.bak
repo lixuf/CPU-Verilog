@@ -1,0 +1,49 @@
+`include "gen_defines.v"
+module ex_alu_bjp(
+);
+//来自公共信号总线
+wire mret   = bjp_i_info [`E203_DECINFO_BJP_MRET ];//异常返回指令
+wire dret   = bjp_i_info [`E203_DECINFO_BJP_DRET ];//？？？
+wire fencei = bjp_i_info [`E203_DECINFO_BJP_FENCEI ];//存储器屏障指令
+wire bxx   = bjp_i_info [`E203_DECINFO_BJP_BXX ]; 
+wire jump  = bjp_i_info [`E203_DECINFO_BJP_JUMP ];//表示是否为无条件跳转指令
+wire rv32  = bjp_i_info [`E203_DECINFO_RV32];//表明是否为32位
+wire bjp_i_bprdt = bjp_i_info [`E203_DECINFO_BJP_BPRDT ];//跳转预测
+
+//输出到alu公共数据通路的操作数
+wire wbck_link = jump;//表示是否为无条件跳转，若为无条件跳转，操作数应使用pc+4/2
+assign bjp_req_alu_op1 = wbck_link ? //若不是无条件跳转应使用两个待比较的操作数
+                            bjp_i_pc //对有条件跳转指令需要借助公共运算通路的公共寄存器
+                          : bjp_i_rs1;
+assign bjp_req_alu_op2 = wbck_link ? 
+                            (rv32 ? `E203_XLEN'd4 : `E203_XLEN'd2)
+                          : bjp_i_rs2;
+
+
+
+//写入alu公共数据通路的控制信号
+assign bjp_req_alu_cmp_eq  = bjp_i_info [`E203_DECINFO_BJP_BEQ  ]; 
+assign bjp_req_alu_cmp_ne  = bjp_i_info [`E203_DECINFO_BJP_BNE  ]; 
+assign bjp_req_alu_cmp_lt  = bjp_i_info [`E203_DECINFO_BJP_BLT  ]; 
+assign bjp_req_alu_cmp_gt  = bjp_i_info [`E203_DECINFO_BJP_BGT  ]; 
+assign bjp_req_alu_cmp_ltu = bjp_i_info [`E203_DECINFO_BJP_BLTU ]; 
+assign bjp_req_alu_cmp_gtu = bjp_i_info [`E203_DECINFO_BJP_BGTU ]; 
+
+assign bjp_req_alu_add  = wbck_link;
+//与交付模块传输数据
+	//与alu总控和交付模块的握手
+	assign bjp_o_valid     = bjp_i_valid;
+	assign bjp_i_ready     = bjp_o_ready;
+	//数据
+	assign bjp_o_cmt_prdt  = bjp_i_bprdt;//跳转预测，静态预测，向后为真
+	assign bjp_o_cmt_rslv  = jump ? 1'b1 : bjp_req_alu_cmp_res;//真实跳转结果
+   assign bjp_o_cmt_bjp = bxx | jump;                       //若为jump(无条件跳转)则一定跳
+   assign bjp_o_cmt_mret = mret;                            //若为有条件则用数据通路发来的控制信号
+   assign bjp_o_cmt_dret = dret;
+   assign bjp_o_cmt_fencei = fencei;
+
+//与写回单元
+assign bjp_o_wbck_wdat  = bjp_req_alu_add_res;//来自运算通路的跳转地址
+assign bjp_o_wbck_err   = 1'b0;//一定不会出错，因为跳转指令不用写回
+
+endmodule

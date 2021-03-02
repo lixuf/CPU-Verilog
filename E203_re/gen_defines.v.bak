@@ -1,0 +1,6 @@
+//IF
+
+//EX
+
+`define IR_Size 32
+`dedine pc_Size 32

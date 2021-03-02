@@ -1,0 +1,61 @@
+`include "gen_defines.v"
+module ex_branchslv(
+);
+
+wire brchmis_flush_ack_pre;
+assign brchmis_flush_ack_pre = brchmis_flush_ack & (~nonalu_excpirq_flush_req_raw);
+wire brchmis_flush_req_pre;
+assign brchmis_flush_req_pre = cmt_i_valid & brchmis_need_flush;
+assign brchmis_flush_req = brchmis_flush_req_pre & (~nonalu_excpirq_flush_req_raw);
+wire brchmis_flush_hsked = brchmis_flush_req & brchmis_flush_ack;
+
+wire brchmis_need_flush = (//表示是否需要流水线冲刷，当预测和真实不符，存储器屏障指令，
+        (cmt_i_bjp & (cmt_i_bjp_prdt ^ cmt_i_bjp_rslv))//异常返回指令和中断返回指令时候
+       | cmt_i_fencei //需要冲刷流水线
+       | cmt_i_mret 
+       | cmt_i_dret 
+      );
+
+wire cmt_i_is_branch = (//表示是否需要分支跳转
+         cmt_i_bjp 
+       | cmt_i_fencei 
+       | cmt_i_mret 
+       | cmt_i_dret 
+      );
+
+  
+
+  // * If it is a DRET instruction, the new target PC is DPC register
+  // * If it is a RET instruction, the new target PC is EPC register
+  // * If predicted as taken, but actually it is not taken, then 
+  //     The new target PC should caculated by PC+2/4
+  // * If predicted as not taken, but actually it is taken, then 
+  //     The new target PC should caculated by PC+offset
+  assign brchmis_flush_add_op1 = cmt_i_dret ? csr_dpc_r : cmt_i_mret ? csr_epc_r : cmt_i_pc; 
+  assign brchmis_flush_add_op2 = cmt_i_dret ? `E203_PC_SIZE'b0 : cmt_i_mret ? `E203_PC_SIZE'b0 :
+                                 (cmt_i_fencei | cmt_i_bjp_prdt) ? (cmt_i_rv32 ? `E203_PC_SIZE'd4 : `E203_PC_SIZE'd2)
+                                    : cmt_i_imm[`E203_PC_SIZE-1:0];
+
+assign brchmis_flush_pc = 
+                                // The fenceI is also need to trigger the flush to its next instructions
+                          (cmt_i_fencei | (cmt_i_bjp & cmt_i_bjp_prdt)) ? (cmt_i_pc + (cmt_i_rv32 ? `E203_PC_SIZE'd4 : `E203_PC_SIZE'd2)) :
+                          (cmt_i_bjp & (~cmt_i_bjp_prdt)) ? (cmt_i_pc + cmt_i_imm[`E203_PC_SIZE-1:0]) :
+                          cmt_i_dret ? csr_dpc_r :
+                          //cmt_i_mret ? csr_epc_r :
+                                       csr_epc_r ;// Last condition cmt_i_mret commented
+                                                  //   to save gatecount and timing
+
+
+  
+  assign cmt_mret_ena = cmt_i_mret & brchmis_flush_hsked;
+  assign cmt_dret_ena = cmt_i_dret & brchmis_flush_hsked;
+  assign cmt_fencei_ena = cmt_i_fencei & brchmis_flush_hsked;
+
+  assign cmt_i_ready = (~cmt_i_is_branch) | 
+                             (
+                                 (brchmis_need_flush ? brchmis_flush_ack_pre : 1'b1) 
+                               // The Non-ALU flush will override the ALU flush
+                                     & (~nonalu_excpirq_flush_req_raw) 
+                             );
+
+endmodule                                 

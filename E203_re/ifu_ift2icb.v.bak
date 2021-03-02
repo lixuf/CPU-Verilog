@@ -1,0 +1,77 @@
+`include "gen_defines.v"
+
+module ifu_ift2icb(//接收取指请求和pc，从相应存储器取指令
+	
+	);
+	
+	
+	
+	
+	
+//取指
+////控制部分
+//////状态码
+localparam ICB_STATE_WIDTH  = 2;//状态码位数
+				//由于是非对齐取指，所以可能需要读两次
+				//因为ITCM为SRAM，输出有寄存器特性，且一次读64位，所以可能不需要额外的读操作
+localparam ICB_STATE_IDLE = 2'd0;//无需发送读请求，闲置状态
+localparam ICB_STATE_1ST  = 2'd1;//第一次读操作
+localparam ICB_STATE_WAIT2ND  = 2'd2;//第一次和第二次之间的等待状态
+localparam ICB_STATE_2ND  = 2'd3;//第二次读操作
+
+//////控制参数 		icb_state_r为状态控制器，决定当前应处在哪个状态
+wire icb_sta_is_idle    = (icb_state_r == ICB_STATE_IDLE   );
+wire icb_sta_is_1st     = (icb_state_r == ICB_STATE_1ST    );
+wire icb_sta_is_wait2nd = (icb_state_r == ICB_STATE_WAIT2ND);
+wire icb_sta_is_2nd     = (icb_state_r == ICB_STATE_2ND    );
+		//每个状态的使能
+		wire state_idle_exit_ena     ;
+		wire state_1st_exit_ena      ;
+		wire state_wait2nd_exit_ena  ;
+		wire state_2nd_exit_ena      ;
+		//指示该状态是否为下一个状态
+		wire [ICB_STATE_WIDTH-1:0] state_idle_nxt   ;
+		wire [ICB_STATE_WIDTH-1:0] state_1st_nxt    ;
+		wire [ICB_STATE_WIDTH-1:0] state_wait2nd_nxt;
+		wire [ICB_STATE_WIDTH-1:0] state_2nd_nxt    ;
+		
+//////状态转换机，控制状态的转换 
+wire [ICB_STATE_WIDTH-1:0] icb_state_nxt;//下一个状态，条件= 该状态的next为1且达到触发的条件
+wire [ICB_STATE_WIDTH-1:0] icb_state_r;//当前所处状态
+wire icb_state_ena;//使能信号 条件为 只要有一个状态达到触发的条件 则为1
+
+assign icb_state_ena = 
+				  state_idle_exit_ena 
+				| state_1st_exit_ena 
+				| state_wait2nd_exit_ena 
+				| state_2nd_exit_ena;
+assign icb_state_nxt = 
+              ({ICB_STATE_WIDTH{state_idle_exit_ena   }} & state_idle_nxt   )
+            | ({ICB_STATE_WIDTH{state_1st_exit_ena    }} & state_1st_nxt    )
+            | ({ICB_STATE_WIDTH{state_wait2nd_exit_ena}} & state_wait2nd_nxt)
+            | ({ICB_STATE_WIDTH{state_2nd_exit_ena    }} & state_2nd_nxt    )
+            ;
+
+sirv_gnrl_dfflr #(ICB_STATE_WIDTH) icb_state_dfflr (icb_state_ena, icb_state_nxt, icb_state_r, clk, rst_n);
+		//闲置状态-idle
+		assign state_idle_exit_ena = icb_sta_is_idle & ifu_req_hsked;//ifu_req_hsked 为fetch和该模块的icb通讯的握手信号
+		assign state_idle_nxt      = ICB_STATE_1ST;//按顺序赋给下一个信号的状态码
+		//2次读的第一次-1st
+		wire ifu_icb_rsp2leftover;//req_need_2uop_r:表明是否需要读存储器
+		assign ifu_icb_rsp2leftover = req_need_2uop_r & icb_sta_is_1st;  //ifu_icb_cmd_hsked：存储器和该模块rsp的握手信号，
+		assign state_1st_exit_ena  = icb_sta_is_1st & (ifu_icb_rsp2leftover ? ifu_icb_rsp_hsked : i_ifu_rsp_hsked);
+		assign state_1st_nxt     = 
+                (
+              // If it need two requests but the ifetch request is not ready to be 
+              //   accepted, then next state is ICB_STATE_WAIT2ND
+                  (req_need_2uop_r & (~ifu_icb_cmd_ready)) ?  ICB_STATE_WAIT2ND
+              // If it need two requests and the ifetch request is ready to be 
+              //   accepted, then next state is ICB_STATE_2ND
+                  : (req_need_2uop_r & (ifu_icb_cmd_ready)) ?  ICB_STATE_2ND 
+              // If it need zero or one requests and new req handshaked, then 
+              //   next state is ICB_STATE_1ST
+              // If it need zero or one requests and no new req handshaked, then
+              //   next state is ICB_STATE_IDLE
+                  :  ifu_req_hsked  ?  ICB_STATE_1ST 
+                                    : ICB_STATE_IDLE 
+                ) ;

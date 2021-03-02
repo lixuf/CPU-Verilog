@@ -1,0 +1,4 @@
+`include "gen_defines.v"
+module ex_lsu_ctrl(
+
+);

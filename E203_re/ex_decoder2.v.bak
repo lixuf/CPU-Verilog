@@ -1,0 +1,263 @@
+`include "gen_defines.v"
+
+module ex_decoder(//除作为指令译码器，还担负大部分控制单元的任务
+input [`IR_Size-1:0] in_IR,
+input [`PC_Size-1:0] in_PC,
+
+//mini_decoder，若输入输出接口改变记得更新mini_decoder
+output dec_if32,
+output dec_ifj,
+output dec_jal,
+output dec_jalr,
+output dec_bxx
+
+);
+
+//将IR分为各功能字段
+
+wire [31:0] IR_32		=in_IR;
+wire [15:0] IR_16		=in_TR[15:0];
+
+wire [6:0] opcode		=in_IR[6:0];
+
+////32位
+
+wire [4:0] rd_32 		=IR_32[11:7];
+wire [2:0] func3_32	=IR_32[14:12];
+wire [4:0] rs1_32		=IR_32[19:15];
+wire [4:0] rs2_32		=IR_32[24:20];
+wire [6:0] func7_32	=IR_32[31:25];
+
+////16位
+
+wire [4:0] rd_16		=rd_32;
+wire [4:0] rs1_16		=rd_16;
+wire [4:0] rs2_16		=IR_16[6:2];
+wire [4:0] rdd_16		={2'b01,IR_16[4:2]};
+wire [4:0] rss1_16	={2'b01,IR_16[9:7]};
+wire [4:0] rss2_16	=rdd_16;
+wire [2:0] func3_16	=IR_16[15:13];
+
+//将各个涉及控制的信号的组合表示出来,以节省门
+////opcode
+
+wire opcode_1_0_00  =(opcode[1:0] == 2'b00);
+wire opcode_1_0_01  =(opcode[1:0] == 2'b01);
+wire opcode_1_0_10  =(opcode[1:0] == 2'b10);
+wire opcode_1_0_11  =(opcode[1:0] == 2'b11);
+wire opcode_4_2_000 =(opcode[4:2] == 3'b000);
+wire opcode_4_2_001 =(opcode[4:2] == 3'b001);
+wire opcode_4_2_010 =(opcode[4:2] == 3'b010);
+wire opcode_4_2_011 =(opcode[4:2] == 3'b011);
+wire opcode_4_2_100 =(opcode[4:2] == 3'b100);
+wire opcode_4_2_101 =(opcode[4:2] == 3'b101);
+wire opcode_4_2_110 =(opcode[4:2] == 3'b110);
+wire opcode_4_2_111 =(opcode[4:2] == 3'b111);
+wire opcode_6_5_00  =(opcode[6:5] == 2'b00);
+wire opcode_6_5_01  =(opcode[6:5] == 2'b01);
+wire opcode_6_5_10  =(opcode[6:5] == 2'b10);
+wire opcode_6_5_11  =(opcode[6:5] == 2'b11);
+
+////func
+//////func3
+////////32位
+
+wire func3_32_000 =(func3_32 == 3'b000);
+wire func3_32_001 =(func3_32 == 3'b001);
+wire func3_32_010 =(func3_32 == 3'b010);
+wire func3_32_011 =(func3_32 == 3'b011);
+wire func3_32_100 =(func3_32 == 3'b100);
+wire func3_32_101 =(func3_32 == 3'b101);
+wire func3_32_110 =(func3_32 == 3'b110);
+wire func3_32_111 =(func3_32 == 3'b111);
+
+////////16位
+
+wire func3_16_000 =(func3_16 == 3'b000);
+wire func3_16_001 =(func3_16 == 3'b001);
+wire func3_16_010 =(func3_16 == 3'b010);
+wire func3_16_011 =(func3_16 == 3'b011);
+wire func3_16_100 =(func3_16 == 3'b100);
+wire func3_16_101 =(func3_16 == 3'b101);
+wire func3_16_110 =(func3_16 == 3'b110);
+wire func3_16_111 =(func3_16 == 3'b111);
+
+//////func7
+
+wire func7_32_0000000 =(func7_32 == 7'b0000000);
+wire func7_32_0100000 =(func7_32 == 7'b0100000);
+wire func7_32_0000001 =(func7_32 == 7'b0000001);
+wire func7_32_0000101 =(func7_32 == 7'b0000101);
+wire func7_32_0001001 =(func7_32 == 7'b0001001);
+wire func7_32_0001101 =(func7_32 == 7'b0001101);
+wire func7_32_0010101 =(func7_32 == 7'b0010101);
+wire func7_32_0100001 =(func7_32 == 7'b0100001);
+wire func7_32_0010001 =(func7_32 == 7'b0010001);
+wire func7_32_0101101 =(func7_32 == 7'b0101101);
+wire func7_32_1111111 =(func7_32 == 7'b1111111);
+wire func7_32_0000100 =(func7_32 == 7'b0000100); 
+wire func7_32_0001000 =(func7_32 == 7'b0001000); 
+wire func7_32_0001100 =(func7_32 == 7'b0001100); 
+wire func7_32_0101100 =(func7_32 == 7'b0101100); 
+wire func7_32_0010000 =(func7_32 == 7'b0010000); 
+wire func7_32_0010100 =(func7_32 == 7'b0010100); 
+wire func7_32_1100000 =(func7_32 == 7'b1100000); 
+wire func7_32_1110000 =(func7_32 == 7'b1110000); 
+wire func7_32_1010000 =(func7_32 == 7'b1010000); 
+wire func7_32_1101000 =(func7_32 == 7'b1101000); 
+wire func7_32_1111000 =(func7_32 == 7'b1111000); 
+wire func7_32_1010001 =(func7_32 == 7'b1010001);  
+wire func7_32_1110001 =(func7_32 == 7'b1110001);  
+wire func7_32_1100001 =(func7_32 == 7'b1100001);  
+wire func7_32_1101001 =(func7_32 == 7'b1101001);
+
+////寄存器
+//////16位
+
+wire rs1_x0_16 	=(rs1_16 == 5'b00000);
+wire rs2_x0_16		=(rs2_16 == 5'b00000);
+wire rd_x0_16  	=(rd_16  == 5'b00000);
+wire rd_x2_16  	=(rd_16  == 5'b00010);
+
+//////32位
+
+wire rs1_x0_32 	=(rs1_32 == 5'b00000);
+wire rs2_x0_32 	=(rs2_32 == 5'b00000);
+wire rs2_x1_32 	=(rs2_32 == 5'b00001);
+wire rd_x0_32  	=(rd_32  == 5'b00000);
+wire rd_x2_32  	=(rd_32  == 5'b00010);
+wire rs1_x31_32	=(rs1_32 == 5'b11111);
+wire rs2_x31_32 	=(rs2_32 == 5'b11111);
+wire rd_x31_32	  	=(rd_32  == 5'b11111);
+
+//判断位数,并输出
+
+wire if32 			=(~(in_IR[4:2] == 3'b111)) & opcode_1_0_11;
+assign dec_if32	=if32;
+
+//控制信号
+////大类控制信号
+//////32位
+
+wire load_32     = opcode_6_5_00 & opcode_4_2_000 & opcode_1_0_11; 
+wire store_32    = opcode_6_5_01 & opcode_4_2_000 & opcode_1_0_11; 
+wire madd_32     = opcode_6_5_10 & opcode_4_2_000 & opcode_1_0_11; 
+wire branch_32   = opcode_6_5_11 & opcode_4_2_000 & opcode_1_0_11; 
+
+wire load_fp_32  = opcode_6_5_00 & opcode_4_2_001 & opcode_1_0_11; 
+wire store_fp_32 = opcode_6_5_01 & opcode_4_2_001 & opcode_1_0_11; 
+wire msub_32     = opcode_6_5_10 & opcode_4_2_001 & opcode_1_0_11; 
+wire jalr_32     = opcode_6_5_11 & opcode_4_2_001 & opcode_1_0_11; 
+
+wire custom0_32  = opcode_6_5_00 & opcode_4_2_010 & opcode_1_0_11; 
+wire custom1_32  = opcode_6_5_01 & opcode_4_2_010 & opcode_1_0_11; 
+wire nmsub_32    = opcode_6_5_10 & opcode_4_2_010 & opcode_1_0_11; 
+wire resved0_32  = opcode_6_5_11 & opcode_4_2_010 & opcode_1_0_11; 
+
+wire miscmem_32  = opcode_6_5_00 & opcode_4_2_011 & opcode_1_0_11; 
+wire nmadd_32    = opcode_6_5_10 & opcode_4_2_011 & opcode_1_0_11; 
+wire jal_32      = opcode_6_5_11 & opcode_4_2_011 & opcode_1_0_11; 
+
+wire op_imm_32   = opcode_6_5_00 & opcode_4_2_100 & opcode_1_0_11; 
+wire op_32       = opcode_6_5_01 & opcode_4_2_100 & opcode_1_0_11; 
+wire op_fp_32    = opcode_6_5_10 & opcode_4_2_100 & opcode_1_0_11; 
+wire system_32   = opcode_6_5_11 & opcode_4_2_100 & opcode_1_0_11; 
+
+wire auipc_32    = opcode_6_5_00 & opcode_4_2_101 & opcode_1_0_11; 
+wire lui_32      = opcode_6_5_01 & opcode_4_2_101 & opcode_1_0_11; 
+wire resved1_32  = opcode_6_5_10 & opcode_4_2_101 & opcode_1_0_11; 
+wire resved2_32  = opcode_6_5_11 & opcode_4_2_101 & opcode_1_0_11; 
+
+wire op_imm_32_32= opcode_6_5_00 & opcode_4_2_110 & opcode_1_0_11; 
+wire op_32_32    = opcode_6_5_01 & opcode_4_2_110 & opcode_1_0_11; 
+wire custom2_32  = opcode_6_5_10 & opcode_4_2_110 & opcode_1_0_11; 
+wire custom3_32  = opcode_6_5_11 & opcode_4_2_110 & opcode_1_0_11; 
+
+//////16位  //还需理解阅读
+
+wire rv16_addi4spn     = opcode_1_0_00 & rv16_func3_000;//
+wire rv16_lw           = opcode_1_0_00 & rv16_func3_010;//
+wire rv16_sw           = opcode_1_0_00 & rv16_func3_110;//
+
+
+wire rv16_addi         = opcode_1_0_01 & rv16_func3_000;//
+wire rv16_jal          = opcode_1_0_01 & rv16_func3_001;//
+wire rv16_li           = opcode_1_0_01 & rv16_func3_010;//
+wire rv16_lui_addi16sp = opcode_1_0_01 & rv16_func3_011;//--
+wire rv16_miscalu      = opcode_1_0_01 & rv16_func3_100;//--
+wire rv16_j            = opcode_1_0_01 & rv16_func3_101;//
+wire rv16_beqz         = opcode_1_0_01 & rv16_func3_110;//
+wire rv16_bnez         = opcode_1_0_01 & rv16_func3_111;//
+
+
+wire rv16_slli         = opcode_1_0_10 & rv16_func3_000;//
+wire rv16_lwsp         = opcode_1_0_10 & rv16_func3_010;//
+wire rv16_jalr_mv_add  = opcode_1_0_10 & rv16_func3_100;//--
+wire rv16_swsp         = opcode_1_0_10 & rv16_func3_110;//
+
+
+wire rv16_lwsp_ilgl    = rv16_lwsp & rv16_rd_x0;
+
+wire rv16_nop          = rv16_addi  
+                         & (~rv16_instr[12]) & (rv16_rd_x0) & (rv16_rs2_x0);
+
+wire rv16_srli         = rv16_miscalu  & (rv16_instr[11:10] == 2'b00);
+wire rv16_srai         = rv16_miscalu  & (rv16_instr[11:10] == 2'b01);
+wire rv16_andi         = rv16_miscalu  & (rv16_instr[11:10] == 2'b10);
+
+wire rv16_instr_12_is0   = (rv16_instr[12] == 1'b0);
+wire rv16_instr_6_2_is0s = (rv16_instr[6:2] == 5'b0);
+
+wire rv16_sxxi_shamt_legl = 
+                 rv16_instr_12_is0 
+               & (~(rv16_instr_6_2_is0s)) 
+                 ;
+wire rv16_sxxi_shamt_ilgl =  (rv16_slli | rv16_srli | rv16_srai) & (~rv16_sxxi_shamt_legl);
+
+wire rv16_addi16sp     = rv16_lui_addi16sp & rd_x2;
+wire rv16_lui          = rv16_lui_addi16sp & (~rd_x0) & (~rd_x2);//
+  
+
+wire rv16_li_ilgl = rv16_li & (rv16_rd_x0);
+wire rv16_lui_ilgl = rv16_lui & (rv16_rd_x0 | rv16_rd_x2 | (rv16_instr_6_2_is0s & rv16_instr_12_is0));
+
+wire rv16_li_lui_ilgl = rv16_li_ilgl | rv16_lui_ilgl;
+
+wire rv16_addi4spn_ilgl = rv16_addi4spn & (rv16_instr_12_is0 & rv16_rd_x0 & opcode_6_5_00);
+wire rv16_addi16sp_ilgl = rv16_addi16sp & rv16_instr_12_is0 & rv16_instr_6_2_is0s; 
+
+wire rv16_subxororand  = rv16_miscalu  & (rv16_instr[12:10] == 3'b011);
+wire rv16_sub          = rv16_subxororand & (rv16_instr[6:5] == 2'b00);
+wire rv16_xor          = rv16_subxororand & (rv16_instr[6:5] == 2'b01);
+wire rv16_or           = rv16_subxororand & (rv16_instr[6:5] == 2'b10);
+wire rv16_and          = rv16_subxororand & (rv16_instr[6:5] == 2'b11);
+
+wire rv16_jr           = rv16_jalr_mv_add 
+                         & (~rv16_instr[12]) & (~rv16_rs1_x0) & (rv16_rs2_x0);
+wire rv16_mv           = rv16_jalr_mv_add 
+                         & (~rv16_instr[12]) & (~rv16_rd_x0) & (~rv16_rs2_x0);
+wire rv16_ebreak       = rv16_jalr_mv_add 
+                         & (rv16_instr[12]) & (rv16_rd_x0) & (rv16_rs2_x0);
+wire rv16_jalr         = rv16_jalr_mv_add 
+                         & (rv16_instr[12]) & (~rv16_rs1_x0) & (rv16_rs2_x0);
+wire rv16_add          = rv16_jalr_mv_add 
+                         & (rv16_instr[12]) & (~rv16_rd_x0) & (~rv16_rs2_x0);
+////小类控制信号
+//////32位
+////////branch
+
+wire beq_32       = branch_32  & func3_32_000;
+wire bne_32       = branch_32  & func3_32_001;
+wire blt_32       = branch_32  & func3_32_100;
+wire bgt_32       = branch_32  & func3_32_101;
+wire bltu_32      = branch_32  & func3_32_110;
+wire bgtu_32      = branch_32  & func3_32_111;
+
+//输出
+
+assign dec_jal 	=jal_32		|	jal_16	|	j_16;
+assign dec_jalr	=jalr_32		|	jalr_16	|	jr_16;
+assign dec_bxx		=branch_32	|	beqz_16	|	bnez_16;
+assign dec_ifj		=dec_jal		|	dec_jalr	|	dec_bxx;
+
+endmodule

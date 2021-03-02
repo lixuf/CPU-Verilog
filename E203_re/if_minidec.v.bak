@@ -1,0 +1,24 @@
+`include "gen_defines.v"
+
+module if_minidec(
+input [`IR_Size-1:0] in_IR,
+
+output dec_if32,
+output dec_ifj,
+output dec_jal,
+output dec_jalr,
+output dec_bxx
+);
+
+ex_decoder2 u_ex_decoder2(
+.in_IR(in_IR),
+.in_PC(`PC_Size'b0),
+
+.dec_if32(dec_if32),
+.dec_ifj(dec_ifj),
+.dec_jal(dec_jal),
+.dec_jalr(dec_jalr),
+.dec_bxx(dec_bxx)
+)
+
+endmodule
