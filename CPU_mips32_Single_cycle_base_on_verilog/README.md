@@ -1,0 +1,2 @@
+# CPU_mips32_Single_cycle_base_on_verilog
+mips 32位单周期流水线，verilog版本
