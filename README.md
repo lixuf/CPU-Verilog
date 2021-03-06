@@ -7,4 +7,5 @@ RISC 16位
 ### 复现的E203处理器，包括详细的标注
 #### 原作品代码
 https://github.com/SI-RISCV/e200_opensource
-#### E203的详细文档
+#### 我编写的E203的详细文档
+https://github.com/lixuf/CPU-Verilog/tree/main/E203_re/%E8%AF%B4%E6%98%8E%E6%96%87%E4%BB%B6
