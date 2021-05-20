@@ -1,0 +1,71 @@
+//组合逻辑，第一级流水状态机控制
+module decoder(
+input [31:0] r_in,//输入指令
+
+
+//输出的控制信号
+//修改寄存器
+output 
+
+
+);
+wire [6:0]  funct=	 r_in[31:25];
+wire [15:0] operand=	 r_in[22:7];
+wire 			des=		 r_in[15];
+wire [7:0]  select=	 r_in[14:7];
+wire [7:0]  channel=	 r_in[24:17];
+wire [1:0]  source=	 r_in[16:15];
+wire 		   sourcez=  r_in[7];
+wire 			dir=		 r_in[7];
+wire [7:0]  channelj= r_in[14:7];
+
+
+wire funct_0000000=(funct==7'b0000000);
+wire funct_0000001=(funct==7'b0000001);
+wire funct_0000010=(funct==7'b0000010);
+wire funct_0000011=(funct==7'b0000011);
+wire funct_0000100=(funct==7'b0000100);
+wire funct_0000101=(funct==7'b0000101);
+wire funct_0000110=(funct==7'b0000110);
+wire funct_0000111=(funct==7'b0000111);
+wire funct_0001000=(funct==7'b0001000);
+wire funct_0001001=(funct==7'b0001001);
+wire funct_0001010=(funct==7'b0001010);
+wire funct_0001011=(funct==7'b0001011);
+wire funct_0001100=(funct==7'b0001100);
+wire funct_0001101=(funct==7'b0001101);
+wire funct_0001110=(funct==7'b0001110);
+wire funct_0001111=(funct==7'b0001111);
+wire funct_0010000=(funct==7'b0010000);
+wire funct_0010001=(funct==7'b0010001);
+wire funct_0010010=(funct==7'b0010010);
+wire funct_0010011=(funct==7'b0010011);
+wire funct_0010100=(funct==7'b0010100);
+wire funct_0010101=(funct==7'b0010101);
+wire funct_0010110=(funct==7'b0010110);
+wire funct_0010111=(funct==7'b0010111);
+wire funct_0011000=(funct==7'b0011000);
+wire funct_0011001=(funct==7'b0011001);
+wire funct_0011010=(funct==7'b0011010);
+wire funct_0011011=(funct==7'b0011011);
+wire funct_0100000=(funct==7'b0100000);
+wire funct_0100011=(funct==7'b0100011);
+wire funct_0100100=(funct==7'b0100100);
+wire funct_0100101=(funct==7'b0100101);
+wire funct_0100110=(funct==7'b0100110);
+wire funct_0100111=(funct==7'b0100111);
+wire funct_0101000=(funct==7'b0101000);
+wire funct_0101001=(funct==7'b0101001);
+wire funct_0101010=(funct==7'b0101010);
+wire funct_0011100=(funct==7'b0011100);
+wire funct_0011101=(funct==7'b0011101);
+wire funct_0011110=(funct==7'b0011110);
+wire funct_0101100=(funct==7'b0101100);
+wire funct_0011111=(funct==7'b0011111);
+wire funct_0101011=(funct==7'b0101011);
+wire funct_0100001=(funct==7'b0100001);
+wire funct_0100010=(funct==7'b0100010);
+
+
+
+endmodule

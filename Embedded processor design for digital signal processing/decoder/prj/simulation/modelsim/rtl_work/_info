@@ -1,0 +1,59 @@
+m255
+K4
+z2
+!s11f vlog 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/intelFPGA_lite/workary/bishe/decoder/prj/simulation/modelsim
+vdecoder
+Z1 !s110 1620278706
+!i10b 1
+!s100 0k;;RHV`N=`Ig0P<7^N2T2
+Z2 !s11b Dg1SIo80bB@j0V0VzS_@n1
+IKQUHofGed;^VMOiJ=Voa60
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+R0
+w1620219669
+8C:/intelFPGA_lite/workary/bishe/decoder/rtl/decoder.v
+FC:/intelFPGA_lite/workary/bishe/decoder/rtl/decoder.v
+!i122 0
+L0 2 189
+Z4 OV;L;2020.1;71
+r1
+!s85 0
+31
+!s108 1620278705.000000
+!s107 C:/intelFPGA_lite/workary/bishe/decoder/rtl/decoder.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/intelFPGA_lite/workary/bishe/decoder/rtl|C:/intelFPGA_lite/workary/bishe/decoder/rtl/decoder.v|
+!i113 1
+Z5 o-vlog01compat -work work
+!s92 -vlog01compat -work work +incdir+C:/intelFPGA_lite/workary/bishe/decoder/rtl
+Z6 tCvgOpt 0
+vtestbench
+R1
+!i10b 1
+!s100 eN5?0iCC<]FfQD4d7Q6h90
+R2
+IRP?hE3`aDboDA9PF35<2D0
+R3
+R0
+w1620218997
+8C:/intelFPGA_lite/workary/bishe/decoder/prj/../rtl/testbench.v
+FC:/intelFPGA_lite/workary/bishe/decoder/prj/../rtl/testbench.v
+!i122 1
+L0 3 189
+R4
+r1
+!s85 0
+31
+!s108 1620278706.000000
+!s107 C:/intelFPGA_lite/workary/bishe/decoder/prj/../rtl/testbench.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+C:/intelFPGA_lite/workary/bishe/decoder/prj/../rtl|C:/intelFPGA_lite/workary/bishe/decoder/prj/../rtl/testbench.v|
+!i113 1
+R5
+!s92 -vlog01compat -work work +incdir+C:/intelFPGA_lite/workary/bishe/decoder/prj/../rtl
+R6
