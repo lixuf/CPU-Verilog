@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="fir">
+		<CBX_INST_ENTRY INSTANCE_NAME="|fir|mul:ver[1].mul1|lpm_mult:lpm_mult_component" CBX_FILE_NAME="mult_d7n.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|fir|mul:ver[3].mul1|lpm_mult:lpm_mult_component" CBX_FILE_NAME="mult_d7n.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|fir|mul:ver[5].mul1|lpm_mult:lpm_mult_component" CBX_FILE_NAME="mult_d7n.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|fir|mul:ver[7].mul1|lpm_mult:lpm_mult_component" CBX_FILE_NAME="mult_d7n.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|fir|mul:ver[0].mul1|lpm_mult:lpm_mult_component" CBX_FILE_NAME="mult_d7n.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|fir|mul:ver[2].mul1|lpm_mult:lpm_mult_component" CBX_FILE_NAME="mult_d7n.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|fir|mul:ver[4].mul1|lpm_mult:lpm_mult_component" CBX_FILE_NAME="mult_d7n.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|fir|mul:ver[6].mul1|lpm_mult:lpm_mult_component" CBX_FILE_NAME="mult_d7n.tdf"/>
+	</PROJECT>
+</LOG_ROOT>
