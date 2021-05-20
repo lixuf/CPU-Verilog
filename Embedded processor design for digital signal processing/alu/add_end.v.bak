@@ -1,0 +1,13 @@
+module add_end(
+input [25:0] data1,
+input [25:0] data2,
+output [15:0] datao
+);
+
+wire [26:0] data1t=data1[25]?{1'b1,data1}:{1'b0,data1};
+wire [26:0] data2t=data2[25]?{1'b1,data2}:{1'b0,data2};
+wire [26:0] dataot=data1t+data2t;
+wire [15:0] dataott=dataot[26:11];
+assign datao=dataott;
+
+endmodule

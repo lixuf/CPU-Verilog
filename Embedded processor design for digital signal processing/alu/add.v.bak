@@ -1,0 +1,14 @@
+module add(
+input [24:0] data0,
+input [24:0] data1,
+
+output [25:0] datao
+);
+wire [25:0] data0_t=data0[24]?{2'b11,data0[23:0]}:{1'b0,data0[24:0]};
+wire [25:0] data1_t=data1[24]?{2'b11,data1[23:0]}:{1'b0,data1[24:0]};
+wire [25:0] datao_t=(data0_t+data1_t);
+//wire [27:0] datao_tt={datao_t[27],datao_t[27]?~datao_t[26:0]+27'b1:datao_t[26:0]};
+assign datao=datao_t;
+
+endmodule
+
