@@ -1,0 +1,12 @@
+module clk_manger(
+input clk_50_0,
+input reset_in,
+input phy_clk,
+
+output clk_50_90,
+output clk_150_0,
+output clk_150_90,
+output phy_clk_90,
+
+output reset
+);
