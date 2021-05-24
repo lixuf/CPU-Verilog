@@ -1,0 +1,22 @@
+module commit(
+//req通道
+input req_vaild,
+output req_ready,
+input [31:0] in_r,
+
+
+
+
+
+//rsp通道
+output rsp_vaild,
+input rsp_ready,
+
+
+
+input clk,
+input reset
+);
+
+
+

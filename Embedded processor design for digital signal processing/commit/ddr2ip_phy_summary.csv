@@ -1,0 +1,25 @@
+#Core: ddr2ip_phy - Instance: commit1|men1|ddr1|ddr_test211|ddr_m0|ddr2ip_controller_phy_inst|ddr2ip_phy_inst
+#Path, Setup Margin, Hold Margin
+"Address Command (Slow 1200mV 85C Model)",2.645,1.189
+"DQS vs CK (Slow 1200mV 85C Model)",1.117,1.131
+"Mimic (Slow 1200mV 85C Model)",0.528,
+"Phy (Slow 1200mV 85C Model)",-0.475,0.366
+"Phy Reset (Slow 1200mV 85C Model)",1.827,1.162
+"Read Capture (Slow 1200mV 85C Model)",0.044,0.059
+"Write (Slow 1200mV 85C Model)",0.092,0.397
+ 
+"Address Command (Slow 1200mV 0C Model)",2.804,1.120
+"DQS vs CK (Slow 1200mV 0C Model)",1.139,1.151
+"Mimic (Slow 1200mV 0C Model)",0.502,
+"Phy (Slow 1200mV 0C Model)",-0.141,0.351
+"Phy Reset (Slow 1200mV 0C Model)",2.065,1.076
+"Read Capture (Slow 1200mV 0C Model)",-0.001,0.014
+"Write (Slow 1200mV 0C Model)",0.115,0.419
+ 
+"Address Command (Fast 1200mV 0C Model)",3.179,0.970
+"DQS vs CK (Fast 1200mV 0C Model)",1.265,1.218
+"Mimic (Fast 1200mV 0C Model)",1.509,
+"Phy (Fast 1200mV 0C Model)",1.509,0.118
+"Phy Reset (Fast 1200mV 0C Model)",3.459,0.492
+"Read Capture (Fast 1200mV 0C Model)",0.302,0.307
+"Write (Fast 1200mV 0C Model)",0.217,0.514

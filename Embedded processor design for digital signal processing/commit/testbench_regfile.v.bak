@@ -1,0 +1,126 @@
+module testbench_regfile;
+reg clk;
+reg reset;
+wire phy_clk;
+reg phy_clk_90;
+
+//men
+reg clk_50_0;
+reg clk_50_90;
+reg clk_150_0;//主时钟
+reg clk_150_90;
+reg clk50;
+
+
+
+
+
+
+
+//req通道
+reg req_vaild;
+wire req_ready;
+reg [31:0] r_in;
+
+
+
+
+
+//rsp通道
+wire rsp_vaild;
+reg rsp_ready;
+
+
+
+
+
+
+//uart
+wire tx;
+reg botton;//按下后清除中断，继续下一个流水
+reg button_start;//按下后才开始输出
+////ad
+
+reg [15:0] 		ad_data;            //ad7606 采样数据
+reg        		ad_busy;            //ad7606 忙标志位 
+reg        		first_data;         //ad7606 第一个数据标志位 	    
+wire [2:0] 		ad_os;              //ad7606 过采样倍率选择
+wire  		ad_cs;              //ad7606 AD cs
+wire    		ad_rd;              //ad7606 AD data read
+wire    		ad_reset;           //ad7606 AD reset
+wire   		ad_convstab;       //ad7606 AD convert start
+////ddr
+wire  [ 14: 0] mem_addr;
+wire  [  2: 0] mem_ba;
+wire           mem_cas_n;
+wire  [  0: 0] mem_cke;
+inout   [  0: 0] mem_clk;
+inout   [  0: 0] mem_clk_n;
+wire  [  0: 0] mem_cs_n;
+wire  [  1: 0] mem_dm;
+inout   [ 15: 0] mem_dq;
+inout   [  1: 0] mem_dqs;
+wire  [  0: 0] mem_odt;
+wire           mem_ras_n;
+wire           mem_we_n ;
+
+
+initial begin
+ad_data<=16'hf00f
+clk<=1'b0;
+reset<=1'b0;
+phy_clk_90<=1'b0;
+clk_50_0<=1'b0;
+clk_50_90<=1'b0;
+clk_150_0<=1'b0;
+clk_150_90<=1'b0;
+clk50<=1'b0;
+rsp_ready<=1'b0;
+req_vaild<=1'b0;
+botton<=1'b0;
+button_start<=1'b0;
+ad_busy<=1'b1;
+first_data<=1'b0;
+
+end
+
+commit commit1(
+.req_vaild(req_vaild),
+.req_ready(req_ready),
+.r_in(r_in),
+.rsp_vaild(rsp_vaild),
+.rsp_ready(rsp_ready),
+.clk(clk),
+.reset(reset),
+.clk_50_0(clk_50_0),
+.clk_50_90(clk_50_90),
+.clk_150_0(clk_150_0),
+.clk_150_90(clk_150_90),
+.tx(tx),
+.clk50(clk50),
+.botton(botton),
+.button_start(button_start),
+.ad_data(ad_data),
+.ad_busy(ad_busy),
+.first_data(first_data),
+.ad_os(ad_os),
+.ad_cs(ad_cs),
+.ad_rd(ad_rd),
+.ad_reset(ad_reset),
+.ad_convstab(ad_convstab),
+.mem_addr(mem_addr),
+.mem_ba(mem_ba),
+.mem_cas_n(mem_cas_n),
+.mem_cke(mem_cke),
+.mem_clk(mem_clk),
+.mem_clk_n(mem_clk_n),
+.mem_cs_n(mem_cs_n),
+.mem_dm(mem_dm),
+.mem_dq(mem_dq),
+.mem_dqs(mem_dqs),
+.mem_odt(mem_odt),
+.mem_ras_n(mem_ras_n),
+.(),
+.phy_clk(phy_clk),
+.phy_clk_90(phy_clk_90)
+);

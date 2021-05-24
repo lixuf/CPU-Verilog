@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!--Created by Liquid XML 2008 (www.liquid-technologies.com) for Altera-->
+<ProgramExecution xmlns:xs="http://www.w3.org/2001/XMLSchema-instance">
+	<QuartusExecution>
+		<AddressBits>64</AddressBits>
+		<ApplicationError>
+		<Bits>64</Bits>
+		<CommandLine>quartus</CommandLine>
+		<ErrorMessage>Access Violation at 0X00007FFC13EE1573</ErrorMessage>
+		<Line>0</Line>
+		<Platform>windows</Platform>
+		<SourceFile>unknown</SourceFile>
+		<StackTrace>
+	0x7ffc13ee1572: (?aji_lock_chain@@YA?AW4AJI_ERROR@@PEAVAJI_CHAIN@@K@Z + 0x2)
+	0x7ffc328c2159:
+	0x7ffc328c4885: (sld_get_device + 0x75)
+	0x7ffc145f2d33: (?get_jtag_device@CHI_CONTROL@@SA_NPEBDPEAV?$list@V?$basic_string@DU?$char_traits@D@_Dinkum_std@@V?$MEM_STL_ALLOCATOR@D@@@_Dinkum_std@@V?$MEM_STL_ALLOCATOR@V?$basic_string@DU?$char_traits@D@_Dinkum_std@@V?$MEM_STL_ALLOCATOR@D@@@_Dinkum_std@@@@@_Dinkum_std@@_N@Z + 0x1d3)
+	0x7ffc6a765990: (?get_auto_select_hardware_device@SLDQ_JTAG_WIDGET@@QEAAXAEAVQString@@0@Z + 0x4c0)
+	 0x675a8376: (?setPriority@QThread@@QEAAXW4Priority@1@@Z + 0x3a6)
+	 0x69021d9e: (_endthreadex + 0x42)
+	 0x69021e3a: (_endthreadex + 0xde)
+	0x7ffc6fbe7033: (BaseThreadInitThunk + 0x13)
+	0x7ffc714c2650: (RtlUserThreadStart + 0x20)
+		</StackTrace>
+		<Subsystem>unknown</Subsystem>
+	</ApplicationError>
+	<Compilation>
+			<CompileID>0</CompileID>
+			<DeviceFamily/>
+			<IncrementalCompilation/>
+			<TopLevelEntityName/>
+		</Compilation>
+		<DateInvoked>2021/05/18 15:26:16</DateInvoked>
+		<ElapsedTime>4538</ElapsedTime>
+		<IP>192.168.121.1,192.168.142.1,10.20.135.217</IP>
+		<IsInternal>false</IsInternal>
+		<IsQt>true</IsQt>
+		<License>
+			<Edition>Web Edition</Edition>
+			<LicenseHostID/>
+		</License>
+		<Machine>
+			<CPUCountLogical>8</CPUCountLogical>
+			<CPUCountPhysical>1</CPUCountPhysical>
+			<CPUSpeed>2808</CPUSpeed>
+			<Hostname>DESKTOP-S858DKJ</Hostname>
+			<NIC>
+				<Address>30e37ab21c44</Address>
+			</NIC>
+			<NIC>
+				<Address>80fa5b3f91d0</Address>
+			</NIC>
+			<NIC>
+				<Address>005056c00001</Address>
+			</NIC>
+			<NIC>
+				<Address>005056c00008</Address>
+			</NIC>
+			<NIC>
+				<Address>00ff750c1ac3</Address>
+			</NIC>
+			<NIC>
+				<Address>5eb3b60333c2</Address>
+			</NIC>
+			<NIC>
+				<Address>30e37ab21c40</Address>
+			</NIC>
+			<NIC>
+				<Address>30e37ab21c41</Address>
+			</NIC>
+			<NIC>
+				<Address>32e37ab21c40</Address>
+			</NIC>
+			<OS>Windows 7</OS>
+			<OSAddressBits>64</OSAddressBits>
+			<OSVersion>6.2</OSVersion>
+			<Platform>windows</Platform>
+			<ScreenResolution>unknown</ScreenResolution>
+			<TotalPhysicalRAM>8046</TotalPhysicalRAM>
+			<TotalVirtualRAM>6912</TotalVirtualRAM>
+		</Machine>
+		<Name>quartus</Name>
+		<PeakMemoryUsed>0</PeakMemoryUsed>
+		<ProjectRevision>
+			<ProjectName/>
+			<Revision/>
+		</ProjectRevision>
+		<QuartusInstallation>
+			<InstallationID>53753574202436.161777781420908</InstallationID>
+			<Version>
+				<Build>162</Build>
+				<BuildSite>SJ</BuildSite>
+				<BuildSuffix/>
+				<Edition>Web Edition</Edition>
+				<ServicePack>0</ServicePack>
+				<VersionNumber>13.1</VersionNumber>
+			</Version>
+		</QuartusInstallation>
+		<QuartusUser>
+			<AlteraUserName/>
+			<FAEContactName/>
+			<TalkbackStatus>
+				<DateSet/>
+				<TalkbackOn>true</TalkbackOn>
+			</TalkbackStatus>
+			<UserID>53753574202436.161821568514224</UserID>
+			<UserName>TR</UserName>
+		</QuartusUser>
+	</QuartusExecution>
+	<SchemaVersion>schema_2013-01-18</SchemaVersion>
+</ProgramExecution>
+

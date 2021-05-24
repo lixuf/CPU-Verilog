@@ -1,0 +1,15 @@
+PLL_Name	clk_manger:clk_manger1|pllip2:pll2|altpll:altpll_component|pllip2_altpll:auto_generated|pll1
+PLLJITTER	32
+PLLSPEmax	84
+PLLSPEmin	-53
+
+PLL_Name	clk_manger:clk_manger1|pllip:pll1|altpll:altpll_component|pllip_altpll:auto_generated|pll1
+PLLJITTER	30
+PLLSPEmax	84
+PLLSPEmin	-53
+
+PLL_Name	commit:commit1|men_top:men1|ddr_addr_top:ddr1|ddr_test2:ddr_test211|ddr2ip:ddr_m0|ddr2ip_controller_phy:ddr2ip_controller_phy_inst|ddr2ip_phy:ddr2ip_phy_inst|ddr2ip_phy_alt_mem_phy:ddr2ip_phy_alt_mem_phy_inst|ddr2ip_phy_alt_mem_phy_clk_reset:clk|ddr2ip_phy_alt_mem_phy_pll:pll|altpll:altpll_component|altpll_2il3:auto_generated|pll1
+PLLJITTER	21
+PLLSPEmax	84
+PLLSPEmin	-53
+
