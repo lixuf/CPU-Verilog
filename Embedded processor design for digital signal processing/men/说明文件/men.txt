@@ -1,0 +1,16 @@
+*source 00 ddr 01 ram 10 ad
+
+
+men 读状态机
+idle：等待读指令--由相应数据通路给出
+      根据source跳转
+r_ad: 读AD，每次dataflag就减length，等length为0就跳转到idle
+r_ddr：读ddr，每次等待up，然后减数据等待条件去idle
+r_ram：读ram，每次减数据等待idle
+*只有ddr需要fifo 其他不需要
+
+
+
+
+
+
