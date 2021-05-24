@@ -1,0 +1,14 @@
+Partition Merge Status : Successful - Tue May 18 16:09:57 2021
+Quartus II 64-Bit Version : 13.1.0 Build 162 10/23/2013 SJ Web Edition
+Revision Name : commit
+Top-level Entity Name : e203_test_top
+Family : Cyclone IV E
+Total logic elements : 12,091
+    Total combinational functions : 8,411
+    Dedicated logic registers : 6,574
+Total registers : 6664
+Total pins : 120
+Total virtual pins : 0
+Total memory bits : 96,864
+Embedded Multiplier 9-bit elements : 112
+Total PLLs : 3

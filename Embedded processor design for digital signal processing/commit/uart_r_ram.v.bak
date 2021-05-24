@@ -1,0 +1,5 @@
+module uart_r_ram(
+input clk_50_0,
+input reset,
+input rx
+);
