@@ -1,0 +1,24 @@
+module jc(
+input jc_en,
+input clk,
+input reset,
+input channel,
+input [15:0] data_out_1_l,
+input [15:0] data_out_2_l,
+input [15:0] data_out_3_h,
+input [15:0] fir_write_data,
+
+input  finish_g1,
+input  finish_g2,
+input  finish_g3,
+input  fir_write_req
+);
+wire vaild=(channel[0]&finish_g1)
+           |(channel[1]&finish_g2)
+			  |(channel[2]&finish_g3)
+			  |(channel[3]&fir_write_req);
+wire [15:0] data=({16{channel[0]}}&data_out_1_l)
+           |({16{channel[1]}}&data_out_2_l)
+			  |({16{channel[2]}}&data_out_3_h)
+			  |({16{channel[3]}}&fir_write_data);
+			  
