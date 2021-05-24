@@ -1,0 +1,72 @@
+module xb_top_3_grade(
+input phy_clk_0,
+input reset,
+input [15:0] rd_data,
+input data_in_read,
+
+
+output [15:0] data_out_1_l,
+output [15:0] data_out_2_l,
+output [15:0] data_out_3_h,
+
+output reg finish,
+output finish_g1,
+output finish_g2,
+output finish_g3
+);
+
+
+
+wire ready_g1;
+wire ready_g2;
+wire ready_g3;
+assign finish_g1=ready_g1;
+assign finish_g2=ready_g2;
+assign finish_g3=ready_g3;
+
+
+
+xb_l_top g1_l(
+ .clk(phy_clk_0),
+ .reset(reset),
+ .data_in(rd_data),
+ .data_in_read(data_in_read),
+.data_out_1_l(data_out_1_l),
+.ready(ready_g1),
+.vaild(ready_g1)
+);
+
+
+
+xb_l_top g2_l( 
+ .clk(phy_clk_0),
+ .reset(reset),
+ .data_in(data_out_1_l),
+ .data_in_read(ready_g1),
+.data_out_1_l(data_out_2_l),
+.ready(ready_g2),
+.vaild(ready_g2)
+);
+
+xb_h_top g3_h(
+ .clk(phy_clk_0),
+ .reset(reset),
+ .data_in(data_out_2_l),
+ .data_in_read(ready_g2),
+.data_out_1_h(data_out_3_h),
+.ready(ready_g3),
+.vaild(ready_g3)
+
+);
+
+always@(posedge phy_clk_0 or negedge reset)
+begin
+ if(~reset)
+  finish<=1'b0;
+ else if(ready_g3)
+  finish<=1'b1;
+ else
+  finish<=1'b0;
+end
+
+endmodule
