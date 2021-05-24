@@ -1,0 +1,13 @@
+module reg_file(
+
+
+);
+//返回ready 置高1clk
+genvar i;
+generate 
+ for(i=0;i<37;i++) begin:reg37
+  
+ end
+endgenerate
+
+endmodule
